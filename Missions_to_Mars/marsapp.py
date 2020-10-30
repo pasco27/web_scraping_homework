@@ -16,7 +16,7 @@ mongo = PyMongo(app)
 @app.route('/')
 def index():
 
-    mars_info = mongo.db.mars_info.find_one()
+    mars_info = mongo.db.mars_info.find()
     return render_template('index.html', mars_info=mars_info)
 
 # Scrape Route
