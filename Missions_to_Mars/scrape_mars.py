@@ -8,7 +8,7 @@ from splinter import Browser
 from bs4 import BeautifulSoup
 
 def scrape():
-
+    mars_total_info = {}
 
 #NASA News Section
     driverPath = !which chromedriver
@@ -26,10 +26,12 @@ def scrape():
     news_title = soup.find('li', attrs = {'class':'slide'}).find('h3').text
     news_p = soup.find('div', class_= 'article_teaser_body').text
 
-    print(f"Title: {news_title}")
-    print(f"Teaser: {news_p}")
+    # print(f"Title: {news_title}")
+    # print(f"Teaser: {news_p}")
 
-
+    # data to mars_info
+    mars_total_info['news_title'] = news_title
+    mars_total_info['news_p'] = news_p
 
 
 #JPL Featured Image Section
@@ -53,8 +55,10 @@ def scrape():
     
     featured_image_url = 'https://www.jpl.nasa.gov' + photo
 
-    print(featured_image_url)
-
+    # print(featured_image_url)
+     
+    # data to mars_info
+    mars_total_info['featured_image_url'] = featured_image_url
     
 
 #Mars Facts Section 
@@ -71,7 +75,8 @@ def scrape():
     print(b)
     print(c)
 
-
+    #going to have to figure out how to get this info into 1 nice table (?) on the html page
+    #this is off to the side as well so make sure to style it appropriately on the page 
 
 
 #Mars Hemispheres Section
@@ -99,3 +104,15 @@ def scrape():
 
     #do I need theese throughtout?
     #browser.quit()
+
+    mars_total_info['hemisphere_image_urls'] = mars_final
+
+
+    mars_total_info = {
+        'news_title': news_title,
+        'news_p': news_p,
+        'featured_image_url': featured_image_url,
+        'mars_facts': html_table,
+        'hemisphere_image_urls': mars_final
+    }
+    return mars_total_info
