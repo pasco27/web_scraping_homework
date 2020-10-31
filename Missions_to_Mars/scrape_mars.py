@@ -11,14 +11,20 @@ def scrape():
     mars_total_info = {}
 
 #NASA News Section
-    driverPath = !which chromedriver
+    driverPath = '/usr/local/bin/chromedriver'
+    
     
     # Setup configuration variables to enable Splinter to interact with browser
-    executable_path = {'executable_path': driverPath[0]}
+    # Deleted [0] fist instance of list here 
+    executable_path = {'executable_path': driverPath}
     browser = Browser('chrome', **executable_path, headless=False)
 
     url = 'https://mars.nasa.gov/news/'
     browser.visit(url)
+
+    # when this is loading - code moves on to grab html (too quickly) 
+    # browser.html does not wait
+    # --- spliter iselementpresent here --- 
 
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
@@ -33,14 +39,21 @@ def scrape():
     mars_total_info['news_title'] = news_title
     mars_total_info['news_p'] = news_p
 
+    
+
 
 #JPL Featured Image Section
-    driverPath = !which chromedriver
-    executable_path = {'executable_path': driverPath[0]}
+    driverPath = '/usr/local/bin/chromedriver'
+    # driverPath = !which chromedriver
+    executable_path = {'executable_path': driverPath}
     browser = Browser('chrome', **executable_path, headless=False)
 
     url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(url)
+
+    # when this is loading - code moves on to grab html (too quickly) 
+    # browser.html does not wait
+    # --- spliter iselementpresent here --- 
 
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
@@ -60,6 +73,7 @@ def scrape():
     # data to mars_info
     mars_total_info['featured_image_url'] = featured_image_url
     
+    browser.quit()
 
 #Mars Facts Section 
     mars_facts_df = pd.read_html('https://space-facts.com/mars/')
@@ -75,13 +89,14 @@ def scrape():
     print(b)
     print(c)
 
-    #going to have to figure out how to get this info into 1 nice table (?) on the html page
+    # figured this out >>> going to have to figure out how to get this info into 1 nice table (?) on the html page
     #this is off to the side as well so make sure to style it appropriately on the page 
-
+    browser.quit()
 
 #Mars Hemispheres Section
-    driverPath = !which chromedriver
-    executable_path = {'executable_path': driverPath[0]}
+    driverPath = '/usr/local/bin/chromedriver'
+    # driverPath = !which chromedriver
+    executable_path = {'executable_path': driverPath}
     browser = Browser('chrome', **executable_path, headless=False)
 
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
@@ -90,20 +105,20 @@ def scrape():
     mars_final = []
 
     for hemisphere in hemispheres:
-    title = hemisphere.find('h3').text
-    link = hemisphere.find('a')['href']
-    url = 'https://astrogeology.usgs.gov/'+link
-    browser.visit(url)
-    html = browser.html
-    soup = BeautifulSoup(html, 'html.parser')
-    dl = soup.find('div', class_='downloads')
-    image = dl.find('a')['href']
-    mars_final.append({'title':title, 'url': image})
+        title = hemisphere.find('h3').text
+        link = hemisphere.find('a')['href']
+        url = 'https://astrogeology.usgs.gov/'+link
+        browser.visit(url)
+        html = browser.html
+        soup = BeautifulSoup(html, 'html.parser')
+        dl = soup.find('div', class_='downloads')
+        image = dl.find('a')['href']
+        mars_final.append({'title':title, 'url': image})
 
     print(mars_final)
 
     #do I need theese throughtout?
-    #browser.quit()
+    browser.quit()
 
     mars_total_info['hemisphere_image_urls'] = mars_final
 
