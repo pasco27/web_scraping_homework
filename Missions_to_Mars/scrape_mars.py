@@ -25,6 +25,7 @@ def scrape():
     # when this is loading - code moves on to grab html (too quickly) 
     # browser.html does not wait
     # --- spliter iselementpresent here --- 
+    browser.is_text_present('splinter', wait_time=10)
 
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
@@ -54,6 +55,7 @@ def scrape():
     # when this is loading - code moves on to grab html (too quickly) 
     # browser.html does not wait
     # --- spliter iselementpresent here --- 
+    browser.is_text_present('splinter', wait_time=10)
 
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
@@ -96,11 +98,13 @@ def scrape():
 #Mars Hemispheres Section
     driverPath = '/usr/local/bin/chromedriver'
     # driverPath = !which chromedriver
-    executable_path = {'executable_path': driverPath}
+    executable_path = {'executable_path': driverPath} # again removed [0]
     browser = Browser('chrome', **executable_path, headless=False)
 
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
+
+    browser.is_text_present('splinter', wait_time=10)
 
     mars_final = []
 
