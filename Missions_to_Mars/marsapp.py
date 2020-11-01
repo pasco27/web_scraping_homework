@@ -25,6 +25,7 @@ def scrape():
 
     mars_info = mongo.db.mars_info
     mars_data = scrape_mars.scrape()
+    print(mars_data)
     mars_info.update({}, mars_data, upsert=True)
 
      # Redirect once completed.

@@ -108,15 +108,15 @@ def scrape():
 
     mars_final = []
 
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+
+    hemispheres = soup.find_all('div', class_='item')
+
     for hemisphere in hemispheres:
         title = hemisphere.find('h3').text
-        link = hemisphere.find('a')['href']
-        url = 'https://astrogeology.usgs.gov/'+link
-        browser.visit(url)
-        html = browser.html
-        soup = BeautifulSoup(html, 'html.parser')
-        dl = soup.find('div', class_='downloads')
-        image = dl.find('a')['href']
+
+        image = hemisphere.find('img')['src']
         mars_final.append({'title':title, 'url': image})
 
     print(mars_final)
